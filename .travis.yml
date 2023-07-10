@@ -1,0 +1,21 @@
+sudo: required # 관리자 권한
+
+language: generic # 언어(플랫폼) => node, python 등등
+
+services:
+  - docker
+
+# 스크립트를 실행할 수 있는 환경 (이미지 만들기)
+before_install:
+  - echo "start Creating an image with dockerfile"
+  - docker build -t soxn3579/docker-react-app -f Dockerfile.dev .
+
+# 스크립트 실행
+script:
+  # -e CI=true 환경설정
+  # -- --coverage : 더 상세하게 보기위함
+  - docker run -e CI=true soxn3579/docker-react-app npm run test -- --coverage
+
+# 테스트 성공 후
+after_success:
+  - echo "Test Success"
